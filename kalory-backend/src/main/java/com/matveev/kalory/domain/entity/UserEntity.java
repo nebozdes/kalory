@@ -24,14 +24,13 @@ import java.util.stream.Collectors;
 
 import static com.matveev.kalory.domain.entity.UserStatus.ACTIVE;
 import static javax.persistence.GenerationType.SEQUENCE;
-import static lombok.AccessLevel.PRIVATE;
 
 @Entity
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = PRIVATE)
+@AllArgsConstructor
 @Table(name = "users")
 public class UserEntity implements UserDetails {
 

@@ -1,9 +1,11 @@
 package com.matveev.kalory.api;
 
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
 import static org.apache.http.HttpStatus.SC_FORBIDDEN;
 import static org.apache.http.HttpStatus.SC_OK;
 
@@ -14,8 +16,8 @@ public class AuthTest extends AbstractWebTest {
         given()
                 .log()
                 .all()
-                .param("username", "admin")
-                .param("password", "password")
+                .contentType(JSON)
+                .body(new JSONObject().put("username", "admin").put("password", "password").toString())
                 .when()
                 .post(getServiceUrl() + "/login")
                 .then()
@@ -27,8 +29,8 @@ public class AuthTest extends AbstractWebTest {
         given()
                 .log()
                 .all()
-                .param("username", "admin")
-                .param("password", "NotAPassword")
+                .contentType(JSON)
+                .body(new JSONObject().put("username", "admin").put("password", "NotAPassword").toString())
                 .when()
                 .post(getServiceUrl() + "/login")
                 .then()

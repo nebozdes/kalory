@@ -39,14 +39,14 @@ public class TagController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_MODERATOR', 'ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMINISTRATOR')")
     public ResponseEntity<Tag> create(@RequestBody @Valid CreateTag createTag) {
         final var newEntity = tagCommands.create(createTag);
         return created(URI.create("/tag/" + newEntity.getId())).body(newEntity);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_MODERATOR', 'ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMINISTRATOR')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         tagCommands.delete(tagId(id));
         return ok().build();

@@ -1,10 +1,10 @@
 
 --- Initial users
 INSERT INTO users VALUES (
-    nextval('user_id_sequence'), 'admin', '{noop}password', 'ACTIVE', 'CLIENT:MODERATOR:ADMINISTRATOR', '2022-12-15'
+    nextval('user_id_sequence'), 'admin', '$2a$10$dWarH285/FAC/17aPQ3vGOWpuQCftm.F1GR8wzJievsWBlecuXpKy', 'ACTIVE', 'CLIENT:MODERATOR:ADMINISTRATOR', '2022-12-15'
 );
 INSERT INTO users VALUES (
-    nextval('user_id_sequence'), 'client', '{noop}password', 'ACTIVE', 'CLIENT', '2022-12-15'
+    nextval('user_id_sequence'), 'client', '$2a$10$dWarH285/FAC/17aPQ3vGOWpuQCftm.F1GR8wzJievsWBlecuXpKy', 'ACTIVE', 'CLIENT', '2022-12-15'
 );
 
 --- Initial products

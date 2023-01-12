@@ -1,17 +1,22 @@
 package com.matveev.kalory.config;
 
-import lombok.SneakyThrows;
+import com.matveev.kalory.service.SecurityService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -20,19 +25,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.matveev.kalory.domain.entity.UserRole.ADMINISTRATOR;
-import static com.matveev.kalory.domain.entity.UserRole.CLIENT;
-import static com.matveev.kalory.domain.entity.UserRole.MODERATOR;
-
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
+    private final SecurityService securityService;
+    private final AuthenticationConfiguration authenticationConfiguration;
 
-    @Override
-    @SneakyThrows
-    protected void configure(HttpSecurity http) {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors().configurationSource(corsConfigurationSource()).and()
                 .csrf().disable()
@@ -40,26 +43,40 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .successHandler(authenticationSuccessHandler())
-                .failureHandler(authenticationFailureHandler())
-                .loginProcessingUrl("/login")
-                .and()
+                .addFilterAt(
+                        new CustomUsernamePasswordAuthenticationFilter(
+                                authenticationManager(), authenticationSuccessHandler(), authenticationFailureHandler()
+                        ),
+                        UsernamePasswordAuthenticationFilter.class)
                 .logout()
                 .logoutUrl("/perform_logout")
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
-                .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
-        ;
+                .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+
+        return http.build();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(securityService);
+        authProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
                 "accept", "cache-Control", "authorization", "content-type", "x-auth-token", "cookie", "Set-Cookie",
@@ -70,16 +87,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    // In-memory authentication to authenticate the user i.e. the user credentials are stored in the memory.
-    @Override
-    @SneakyThrows
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.inMemoryAuthentication().withUser("admin").password("{noop}password")
-                .roles(CLIENT.getAuthority(), MODERATOR.getAuthority(), ADMINISTRATOR.getAuthority());
-        auth.inMemoryAuthentication().withUser("client").password("{noop}password")
-                .roles(CLIENT.getAuthority());
     }
 
     @Bean

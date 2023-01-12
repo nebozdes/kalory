@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 
@@ -48,8 +49,8 @@ public class AbstractWebTest {
 
     protected String getSession(String login) {
         return given()
-                .param("username", login)
-                .param("password", "password")
+                .contentType(JSON)
+                .body(new JSONObject().put("username", login).put("password", "password").toString())
                 .when()
                 .post(getServiceUrl() + "/login")
                 .then()

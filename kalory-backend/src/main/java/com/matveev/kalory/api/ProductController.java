@@ -39,14 +39,14 @@ public class ProductController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_MODERATOR', 'ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMINISTRATOR')")
     public ResponseEntity<Product> create(@RequestBody @Valid CreateProduct createProduct) {
         final var newEntity = productCommands.create(createProduct);
         return created(URI.create("/product/" + newEntity.getId())).body(newEntity);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_MODERATOR', 'ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMINISTRATOR')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productCommands.delete(productId(id));
         return ok().build();

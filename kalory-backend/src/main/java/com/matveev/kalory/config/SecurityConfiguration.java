@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -49,7 +51,8 @@ public class SecurityConfiguration {
                         ),
                         UsernamePasswordAuthenticationFilter.class)
                 .logout()
-                .logoutUrl("/perform_logout")
+                .logoutUrl("/logout")
+                .logoutSuccessHandler((request, response, authentication) -> response.setStatus(SC_OK))
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
@@ -102,7 +105,7 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (httpServletRequest, httpServletResponse, e) -> {
-            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            httpServletResponse.setStatus(SC_OK);
             httpServletResponse.setHeader("Access-Control-Allow-Origin", httpServletRequest.getHeader("Origin"));
             httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
             httpServletResponse.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE");

@@ -65,7 +65,7 @@ public class ConsumedProductQueriesTest implements ConsumedProductTestData {
         when(repository.findAll(pageObject)).thenReturn(Page.empty());
 
         // when
-        final var result = queries.list(new ListConsumedProducts(1, 10));
+        final var result = queries.list(new ListConsumedProducts(1, 10, null));
 
         // then
         assertThat(result).isEqualTo(Page.empty());
@@ -98,7 +98,7 @@ public class ConsumedProductQueriesTest implements ConsumedProductTestData {
         when(repository.findAll(pageObject)).thenReturn(input);
 
         // when
-        final var result = queries.list(new ListConsumedProducts(1, 10));
+        final var result = queries.list(new ListConsumedProducts(1, 10, null));
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(expectedResult.getTotalElements());

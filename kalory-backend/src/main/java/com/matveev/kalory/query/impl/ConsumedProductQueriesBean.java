@@ -22,7 +22,10 @@ public class ConsumedProductQueriesBean implements ConsumedProductQueries {
     @Override
     public Page<ConsumedProduct> list(ListConsumedProducts listProducts) {
         final var pageObject = of(listProducts.page, listProducts.limit);
-        return consumedProductRepository.findAll(pageObject).map(ConsumedProductMapper::map);
+        return listProducts.consumptionDate
+                .map(consumptionDate -> consumedProductRepository.findAllByConsumptionDate(consumptionDate, pageObject))
+                .orElseGet(() -> consumedProductRepository.findAll(pageObject))
+                .map(ConsumedProductMapper::map);
     }
 
     @Override

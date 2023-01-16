@@ -4,10 +4,10 @@ import io.restassured.response.ValidatableResponse;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static java.time.LocalDate.now;
+import static java.time.temporal.ChronoUnit.DAYS;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.equalTo;
@@ -22,7 +22,37 @@ public class ConsumedProductControllerTest extends AbstractWebTest {
         final var id = tryCreateConsumedProduct(clientSessionId, createBody())
                 .extract().body().jsonPath().getInt("id");
 
-        // read
+        final var yesterday = now().minus(1, DAYS).toString();
+
+        // create one with yesterday's date
+        final var yesterdayId = tryCreateConsumedProduct(clientSessionId, createBody()
+                .put("consumptionDate", yesterday))
+                .extract().body().jsonPath().getInt("id");
+
+        // read only for yesterday
+        given()
+                .when()
+                .sessionId(clientSessionId)
+                .param("page", 0)
+                .param("limit", 10)
+                .param("consumptionDate", yesterday)
+                .get(getServiceUrl() + "/consumed-product")
+                .then()
+                .statusCode(SC_OK)
+                .body("size", equalTo(10))
+                .body("numberOfElements", equalTo(1))
+                .body("content.size()", equalTo(1))
+                .body("content.get(0).id", equalTo(yesterdayId))
+                .body("content.get(0).productId", equalTo(1))
+                .body("content.get(0).consumptionDate", equalTo(yesterday))
+                .body("content.get(0).consumptionAmount", equalTo(200f))
+                .body("content.get(0).comment", equalTo("Some comment"))
+                .body("content.get(0).calculatedCalories", equalTo(758f))
+                .body("content.get(0).calculatedCarbs", equalTo(136f))
+                .body("content.get(0).calculatedLipids", equalTo(14f))
+                .body("content.get(0).calculatedProteins", equalTo(26f));
+
+        // read all
         given()
                 .when()
                 .sessionId(clientSessionId)
@@ -32,24 +62,25 @@ public class ConsumedProductControllerTest extends AbstractWebTest {
                 .then()
                 .statusCode(SC_OK)
                 .body("size", equalTo(10))
-                .body("numberOfElements", equalTo(1))
-                .body("content.size()", equalTo(1))
+                .body("numberOfElements", equalTo(2))
+                .body("content.size()", equalTo(2))
                 .body("content.get(0).id", equalTo(id))
-                .body("content.get(0).productId", equalTo(1))
-                .body("content.get(0).consumptionDate", equalTo(LocalDate.now().toString()))
-                .body("content.get(0).consumptionAmount", equalTo(200f))
-                .body("content.get(0).comment", equalTo("Some comment"))
-                .body("content.get(0).calculatedCalories", equalTo(758f))
-                .body("content.get(0).calculatedCarbs", equalTo(136f))
-                .body("content.get(0).calculatedLipids", equalTo(14f))
-                .body("content.get(0).calculatedProteins", equalTo(26f))
+                .body("content.get(1).id", equalTo(yesterdayId))
         ;
 
-        // delete
+        // delete today's
         given()
                 .when()
                 .sessionId(clientSessionId)
                 .delete(getServiceUrl() + "/consumed-product/" + id)
+                .then()
+                .statusCode(SC_OK);
+
+        // delete yesterday's
+        given()
+                .when()
+                .sessionId(clientSessionId)
+                .delete(getServiceUrl() + "/consumed-product/" + yesterdayId)
                 .then()
                 .statusCode(SC_OK);
 
@@ -97,7 +128,7 @@ public class ConsumedProductControllerTest extends AbstractWebTest {
     private JSONObject createBody() {
         return new JSONObject()
                 .put("productId", 1)
-                .put("consumptionDate", LocalDate.now().toString())
+                .put("consumptionDate", now().toString())
                 .put("consumptionAmount", 200)
                 .put("comment", "Some comment");
     }

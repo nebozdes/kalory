@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -33,5 +33,5 @@ public class WeightCheck {
     private final BigDecimal value;
 
     @NotNull
-    private final Instant checkTime;
+    private final LocalDate checkTime;
 }

@@ -28,6 +28,9 @@ public class ConsumedProduct {
     private final ConsumedProductId id;
 
     @NotNull
+    private final String productName;
+
+    @NotNull
     private final ProductId productId;
 
     @JsonIgnore

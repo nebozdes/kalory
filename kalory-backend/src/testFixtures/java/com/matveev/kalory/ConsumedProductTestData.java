@@ -2,7 +2,7 @@ package com.matveev.kalory;
 
 import com.matveev.kalory.domain.entity.ConsumedProductEntity;
 import com.matveev.kalory.model.ConsumedProduct;
-import com.matveev.kalory.model.id.ProductId;
+import com.matveev.kalory.model.Product;
 
 import static com.matveev.kalory.RandomUtils.aRandomId;
 import static com.matveev.kalory.model.id.ConsumedProductId.consumedProductId;
@@ -13,12 +13,13 @@ import static java.util.Optional.of;
 
 public interface ConsumedProductTestData {
 
-    default ConsumedProduct.ConsumedProductBuilder aConsumedProduct(ProductId productId) {
+    default ConsumedProduct.ConsumedProductBuilder aConsumedProduct(Product product) {
         return ConsumedProduct.builder()
                 .id(consumedProductId(aRandomId()))
                 .userId(userId(aRandomId()))
                 .comment(of("Some comment"))
-                .productId(productId)
+                .productId(product.getId())
+                .productName(product.getName())
                 .calculatedProteins(valueOf(10))
                 .calculatedCarbs(valueOf(20))
                 .calculatedLipids(valueOf(30))

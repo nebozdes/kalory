@@ -1,7 +1,9 @@
 package com.matveev.kalory.query;
 
 import com.matveev.kalory.ConsumedProductTestData;
+import com.matveev.kalory.ProductTestData;
 import com.matveev.kalory.domain.repository.ConsumedProductRepository;
+import com.matveev.kalory.domain.repository.ProductRepository;
 import com.matveev.kalory.error.EntityNotFoundException;
 import com.matveev.kalory.model.request.list.ListConsumedProducts;
 import com.matveev.kalory.query.impl.ConsumedProductQueriesBean;
@@ -17,26 +19,33 @@ import java.util.List;
 import static com.matveev.kalory.model.id.ConsumedProductId.consumedProductId;
 import static com.matveev.kalory.model.id.ProductId.productId;
 import static com.matveev.kalory.model.id.UserId.userId;
+import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ConsumedProductQueriesTest implements ConsumedProductTestData {
+public class ConsumedProductQueriesTest implements ConsumedProductTestData, ProductTestData {
 
     private final ConsumedProductRepository repository = mock(ConsumedProductRepository.class);
-    private final ConsumedProductQueries queries = new ConsumedProductQueriesBean(repository);
+    private final ProductRepository productRepository = mock(ProductRepository.class);
+    private final ConsumedProductQueries queries = new ConsumedProductQueriesBean(repository, productRepository);
 
     @Test
     public void should_return_product_if_found_by_id() {
         // given
         final var id = 123L;
         final var entity = aConsumedProductEntity(1L).id(id).userId(3L).build();
-        final var expectedResult = aConsumedProduct(productId(1L))
+        final var product = aProduct().id(productId(1L)).name("Some product").build();
+        final var productEntity = aProductEntity().id(1L).name("Some product").build();
+        final var expectedResult = aConsumedProduct(product)
                 .id(consumedProductId(id))
+                .productName("Some product")
                 .userId(userId(3L))
                 .build();
+
+        when(productRepository.getById(1L)).thenReturn(productEntity);
         when(repository.getById(id)).thenReturn(entity);
 
         // when
@@ -65,7 +74,7 @@ public class ConsumedProductQueriesTest implements ConsumedProductTestData {
         when(repository.findAll(pageObject)).thenReturn(Page.empty());
 
         // when
-        final var result = queries.list(new ListConsumedProducts(1, 10, null));
+        final var result = queries.list(new ListConsumedProducts(1, 10, empty()));
 
         // then
         assertThat(result).isEqualTo(Page.empty());
@@ -76,6 +85,8 @@ public class ConsumedProductQueriesTest implements ConsumedProductTestData {
     public void should_return_mapped_dtos_if_any_products_found_for_list() {
         // given;
         final var pageObject = PageRequest.of(1, 10);
+        final var product = aProduct().id(productId(4L)).name("Some product").build();
+        final var productEntity = aProductEntity().id(4L).name("Some product").build();
         final var input = new PageImpl<>(
                 List.of(
                         aConsumedProductEntity(4L).id(1L).userId(3L).build(),
@@ -87,18 +98,19 @@ public class ConsumedProductQueriesTest implements ConsumedProductTestData {
         );
         final var expectedResult = new PageImpl<>(
                 List.of(
-                        aConsumedProduct(productId(4L)).id(consumedProductId(1L)).userId(userId(3L)).build(),
-                        aConsumedProduct(productId(4L)).id(consumedProductId(2L)).userId(userId(3L)).build(),
-                        aConsumedProduct(productId(4L)).id(consumedProductId(3L)).userId(userId(3L)).build()
+                        aConsumedProduct(product).id(consumedProductId(1L)).userId(userId(3L)).build(),
+                        aConsumedProduct(product).id(consumedProductId(2L)).userId(userId(3L)).build(),
+                        aConsumedProduct(product).id(consumedProductId(3L)).userId(userId(3L)).build()
                         ),
                 pageObject,
                 3
         );
 
+        when(productRepository.getById(4L)).thenReturn(productEntity);
         when(repository.findAll(pageObject)).thenReturn(input);
 
         // when
-        final var result = queries.list(new ListConsumedProducts(1, 10, null));
+        final var result = queries.list(new ListConsumedProducts(1, 10, empty()));
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(expectedResult.getTotalElements());

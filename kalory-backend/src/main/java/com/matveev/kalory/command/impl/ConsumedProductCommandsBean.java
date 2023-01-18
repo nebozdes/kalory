@@ -3,10 +3,10 @@ package com.matveev.kalory.command.impl;
 import com.matveev.kalory.command.ConsumedProductCommands;
 import com.matveev.kalory.domain.entity.ConsumedProductEntity;
 import com.matveev.kalory.domain.repository.ConsumedProductRepository;
+import com.matveev.kalory.domain.repository.ProductRepository;
 import com.matveev.kalory.model.ConsumedProduct;
 import com.matveev.kalory.model.id.ConsumedProductId;
 import com.matveev.kalory.model.request.create.CreateConsumedProduct;
-import com.matveev.kalory.query.ProductQueries;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import static java.util.Objects.requireNonNull;
 public class ConsumedProductCommandsBean implements ConsumedProductCommands {
 
     private final ConsumedProductRepository consumedProductRepository;
-    private final ProductQueries productQueries;
+    private final ProductRepository productRepository;
 
     @Override
     public ConsumedProduct create(@Valid @NotNull CreateConsumedProduct createConsumedProduct) {
@@ -35,7 +35,7 @@ public class ConsumedProductCommandsBean implements ConsumedProductCommands {
         entity.setConsumptionAmount(createConsumedProduct.getConsumptionAmount());
         entity.setUserId(createConsumedProduct.getUserId().value());
 
-        final var product = productQueries.getById(createConsumedProduct.getProductId());
+        final var product = productRepository.getById(createConsumedProduct.getProductId().value());
 
         final var amount = createConsumedProduct.getConsumptionAmount();
         final var amountFracture = amount.divide(product.getBaseAmount(), 4, CEILING);
@@ -44,9 +44,9 @@ public class ConsumedProductCommandsBean implements ConsumedProductCommands {
         entity.setCalculatedCarbs(amountFracture.multiply(product.getBaseCarbs()));
         entity.setCalculatedLipids(amountFracture.multiply(product.getBaseLipids()));
         entity.setCalculatedProteins(amountFracture.multiply(product.getBaseProteins()));
-        entity.setProductId(product.getId().value());
+        entity.setProductId(product.getId());
 
-        return map(consumedProductRepository.save(entity));
+        return map(consumedProductRepository.save(entity), product);
     }
 
     @Override

@@ -9,9 +9,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
-
-import static java.util.Optional.empty;
 
 @Getter
 @Setter
@@ -23,7 +20,8 @@ public class CreateWeightTarget {
     @Positive
     private BigDecimal value;
 
-    private Optional<LocalDate> deadline = empty();
+    @NotNull
+    private LocalDate deadline;
 
     public CreateWeightTarget withUserId(UserId userId) {
         this.userId = userId;

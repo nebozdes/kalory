@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS weight_checks(
     id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('weight_check_id_sequence'),
     user_id BIGINT NOT NULL,
     weight_check_value DECIMAL(15,5) NOT NULL CHECK(weight_check_value > 0),
-    check_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    check_time DATE NOT NULL,
 
     CONSTRAINT weight_checks_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS weight_targets (
     id BIGINT NOT NULL PRIMARY KEY DEFAULT nextval('weight_target_id_sequence'),
     user_id BIGINT NOT NULL,
     weight_target_value DECIMAL(15,5) NOT NULL CHECK(weight_target_value > 0),
-    deadline DATE,
+    deadline DATE NOT NULL,
 
     CONSTRAINT weight_targets_user_id_fk FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );

@@ -27,7 +27,7 @@ public class WeightTargetCommandsBean implements WeightTargetCommands {
 
         final var entity = new WeightTargetEntity();
 
-        entity.setDeadline(createWeightTarget.getDeadline().orElse(null));
+        entity.setDeadline(createWeightTarget.getDeadline());
         entity.setValue(createWeightTarget.getValue());
         entity.setUserId(createWeightTarget.getUserId().value());
 

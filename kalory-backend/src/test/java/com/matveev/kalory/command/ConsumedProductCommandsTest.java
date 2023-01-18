@@ -5,8 +5,8 @@ import com.matveev.kalory.ProductTestData;
 import com.matveev.kalory.command.impl.ConsumedProductCommandsBean;
 import com.matveev.kalory.domain.entity.ConsumedProductEntity;
 import com.matveev.kalory.domain.repository.ConsumedProductRepository;
+import com.matveev.kalory.domain.repository.ProductRepository;
 import com.matveev.kalory.model.request.create.CreateConsumedProduct;
-import com.matveev.kalory.query.ProductQueries;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -32,8 +32,8 @@ import static org.mockito.Mockito.when;
 public class ConsumedProductCommandsTest implements ConsumedProductTestData, ProductTestData {
 
     private final ConsumedProductRepository repository = mock(ConsumedProductRepository.class);
-    private final ProductQueries productQueries = mock(ProductQueries.class);
-    private final ConsumedProductCommands commands = new ConsumedProductCommandsBean(repository, productQueries);
+    private final ProductRepository productRepository = mock(ProductRepository.class);
+    private final ConsumedProductCommands commands = new ConsumedProductCommandsBean(repository, productRepository);
 
     private final Long productId = 321L;
 
@@ -41,6 +41,13 @@ public class ConsumedProductCommandsTest implements ConsumedProductTestData, Pro
     public void should_call_repository_method_for_create() {
         // given
         final var id = 123L;
+        final var productEntity = aProductEntity()
+                .id(productId)
+                .baseProteins(valueOf(1))
+                .baseCarbs(valueOf(2))
+                .baseLipids(valueOf(3))
+                .baseCalories(valueOf(100))
+                .build();
         final var product = aProduct()
                 .id(productId(productId))
                 .baseProteins(valueOf(1))
@@ -49,7 +56,8 @@ public class ConsumedProductCommandsTest implements ConsumedProductTestData, Pro
                 .baseCalories(valueOf(100))
                 .build();
 
-        final var expectedResult = aConsumedProduct(productId(id))
+
+        final var expectedResult = aConsumedProduct(product)
                 .id(consumedProductId(id))
                 .userId(userId(123L))
                 .productId(product.getId())
@@ -60,7 +68,7 @@ public class ConsumedProductCommandsTest implements ConsumedProductTestData, Pro
                 .calculatedCalories(valueOf(500))
                 .build();
 
-        when(productQueries.getById(product.getId())).thenReturn(product);
+        when(productRepository.getById(product.getId().value())).thenReturn(productEntity);
         when(repository.save(any())).thenAnswer(invocation -> {
             final var firstParam = (ConsumedProductEntity) invocation.getArguments()[0];
             firstParam.setId(id);

@@ -36,7 +36,7 @@ public class WeightCheckControllerTest extends AbstractWebTest {
                 .body("content.size()", equalTo(1))
                 .body("content.get(0).id", equalTo(id))
                 .body("content.get(0).value", equalTo(60f))
-                .body("content.get(0).checkTime", equalTo("2022-12-25T00:00:00Z"))
+                .body("content.get(0).checkTime", equalTo("2022-12-25"))
         ;
 
         // delete

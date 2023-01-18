@@ -70,7 +70,7 @@ public class WeightTargetCommandsTest implements WeightTargetTestData {
 
     private CreateWeightTarget createRequest() {
         final var request = new CreateWeightTarget();
-        request.setDeadline(Optional.of(now().plusDays(7)));
+        request.setDeadline(now().plusDays(7));
         request.setValue(BigDecimal.TEN);
         request.setUserId(userId(1L));
         return request;

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static com.matveev.kalory.mapper.WeightCheckMapper.map;
 import static com.matveev.kalory.model.id.UserId.userId;
 import static com.matveev.kalory.model.id.WeightCheckId.weightCheckId;
-import static java.time.Instant.now;
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WeightCheckMapperTest implements WeightCheckTestData {

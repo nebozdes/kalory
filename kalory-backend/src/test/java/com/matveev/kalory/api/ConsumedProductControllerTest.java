@@ -39,7 +39,7 @@ public class ConsumedProductControllerTest extends AbstractWebTest {
                 .get(getServiceUrl() + "/consumed-product")
                 .then()
                 .statusCode(SC_OK)
-                .body("size", equalTo(10))
+                .body("size", equalTo(1))
                 .body("numberOfElements", equalTo(1))
                 .body("content.size()", equalTo(1))
                 .body("content.get(0).id", equalTo(yesterdayId))

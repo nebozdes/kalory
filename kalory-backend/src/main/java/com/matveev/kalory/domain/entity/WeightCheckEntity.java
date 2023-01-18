@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDate;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 import static lombok.AccessLevel.PRIVATE;
@@ -40,5 +40,5 @@ public class WeightCheckEntity {
     private BigDecimal value;
 
     @Column(name = "check_time")
-    private Instant checkTime;
+    private LocalDate checkTime;
 }

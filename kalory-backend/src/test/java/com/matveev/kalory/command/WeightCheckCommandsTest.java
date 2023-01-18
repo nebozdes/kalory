@@ -10,10 +10,11 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDate;
 
 import static com.matveev.kalory.model.id.UserId.userId;
 import static com.matveev.kalory.model.id.WeightCheckId.weightCheckId;
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -29,7 +30,7 @@ public class WeightCheckCommandsTest implements WeightCheckTestData {
     private final WeightCheckRepository repository = mock(WeightCheckRepository.class);
     private final WeightCheckCommandsBean commands = new WeightCheckCommandsBean(repository);
 
-    private final Instant now = Instant.now();
+    private final LocalDate now = now();
 
     @Test
     public void should_call_repository_method_for_create() {

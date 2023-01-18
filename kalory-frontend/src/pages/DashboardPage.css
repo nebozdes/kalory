@@ -1,0 +1,26 @@
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+  align-items: start;
+
+  padding: 0 50px;
+  column-gap: 50px;
+}
+
+.dashboard-list-container {
+  padding: 20px 0;
+  justify-self: stretch;
+}
+.dashboard-form-container {
+  padding: 20px 0;
+  justify-self: stretch;
+}
+.dashboard-list-container table {
+  width: 100%;
+}
+
+.dashboard-form-container .form-button-row .create-consumed-product-button {
+  padding: 6px 12px;
+  font-size: 18px;
+}

@@ -1,0 +1,41 @@
+.button-form {
+  border: 1px solid #528265;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.button-primary {
+  color: white;
+  background-color: #528265;
+}
+
+.button-primary:hover {
+  background-color: #3d7955;
+}
+
+.button-secondary {
+  color: #3d7955;
+  background-color: white;
+}
+
+.button-secondary:hover {
+  background-color: #3d7955;
+  color: white;
+}
+
+.button-primary.button-disabled,
+.button-secondary.button-disabled {
+  color: white;
+  background-color: #7f9287;
+  cursor: not-allowed;
+}
+
+.button-danger {
+  border: 1px solid #994f42;
+  color: white;
+  background-color: #994f42;
+}
+
+.button-danger:hover {
+  background-color: #97665d;
+}

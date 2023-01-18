@@ -1,0 +1,28 @@
+.tags-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+  align-items: start;
+
+  padding: 0 50px;
+  column-gap: 50px;
+}
+
+.tags-list-container {
+  padding: 20px 0;
+  justify-self: stretch;
+}
+
+.tags-list-container table {
+  width: 100%;
+}
+
+.tags-form-container {
+  padding: 20px 0;
+  justify-self: stretch;
+}
+
+.tags-form-container .form-button-row .create-tags-button {
+  padding: 6px 12px;
+  font-size: 18px;
+}

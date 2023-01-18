@@ -1,0 +1,23 @@
+.products-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+  align-items: start;
+
+  padding: 0 50px;
+  column-gap: 50px;
+}
+
+.products-list-container {
+  padding: 20px 0;
+  justify-self: end;
+}
+.products-form-container {
+  padding: 20px 0;
+  justify-self: stretch;
+}
+
+.products-form-container .form-button-row .create-product-button {
+  padding: 6px 12px;
+  font-size: 18px;
+}

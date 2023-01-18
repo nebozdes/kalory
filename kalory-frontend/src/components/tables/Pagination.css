@@ -1,0 +1,20 @@
+.pagination-container .pagination-active-page {
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.pagination-container li {
+  list-style: none;
+  display: inline-block;
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 18px;
+  text-decoration: underline;
+  color: #528265;
+}
+
+.pagination-container ul {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}

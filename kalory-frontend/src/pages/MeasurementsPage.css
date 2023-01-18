@@ -1,0 +1,54 @@
+.measurements-container {
+  display: grid;
+  grid-template-columns: minmax(700px, 2fr) minmax(300px, 1fr) minmax(
+      300px,
+      1fr
+    );
+  grid-template-rows: 1fr;
+  align-items: start;
+  justify-content: center;
+
+  padding: 0 50px;
+  column-gap: 50px;
+}
+
+.measurements-list-container {
+  padding: 20px 0;
+}
+
+.measurements-list-container .measurements-table-trend-container {
+  display: grid;
+}
+
+.measurements-list-container
+  .measurements-table-trend-container
+  .recharts-wrapper {
+  justify-self: center;
+}
+
+.measurements-list-container .measurements-table-trend-container table {
+  width: 100%;
+}
+
+.measurements-list-container .measurements-view-toggler {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #528265;
+  font-size: 18px;
+  font-weight: 400;
+  display: inline-block;
+}
+
+.measurements-checks-form-container {
+  padding: 20px 0;
+}
+
+.measurements-targets-form-container {
+  padding: 20px 0;
+}
+
+.measurements-checks-form-container .form-button-row .create-check-button,
+.measurements-targets-form-container .form-button-row .create-target-button {
+  padding: 6px 12px;
+  font-size: 18px;
+}

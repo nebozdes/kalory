@@ -1,0 +1,58 @@
+.navigation-container {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 4fr 1fr;
+  align-items: center;
+  justify-items: start;
+  gap: 30px;
+
+  /* Styling */
+  border-bottom: 3px solid #528265;
+}
+
+.navigation-container .logo-container {
+  margin: 0 auto;
+}
+
+.navigation-container .logo-container .text-logo {
+  /* Styling */
+  font-size: 32px;
+  font-family: "Alfa Slab One", "Viaoda Libre", sans-serif;
+  color: #528265;
+}
+
+.navigation-container .links-container {
+  display: grid;
+  grid-template-columns: repeat(10, auto);
+  gap: 10px;
+}
+
+.navigation-container .account-container {
+  justify-self: right;
+  align-self: center;
+
+  /* Styling */
+  font-size: 20px;
+  color: #528265;
+  text-align: right;
+}
+
+.navigation-container .account-container .logout-button {
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 16px;
+}
+
+.navigation-container .account-container .logout-button:hover {
+  text-decoration: underline;
+}
+
+.navigation-container .account-container .account-name {
+  display: inline-block;
+}
+
+.navigation-container .links-container .navigation-link {
+  /* Styling */
+  color: #528265;
+  display: inline-block;
+}

@@ -1,4 +1,3 @@
-import ReactPaginate from "react-paginate";
 import "./Pagination.css";
 import { formatShort } from "../../utils";
 
@@ -6,7 +5,7 @@ function DatePagination({ onDateChange, forcedDate }) {
   const renderDate = (date, className) => {
     return (
       <li>
-        <a className={className} onClick={() => onDateChange(date)}>
+        <a href="#" className={className} onClick={() => onDateChange(date)}>
           {formatShort(date)}
         </a>
       </li>

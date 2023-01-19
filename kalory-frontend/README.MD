@@ -20,7 +20,7 @@ I know that elements like Button, Table, Dropdown - shouldn't be implemented fro
 
 - Implement adaptive mobile layout
 - Provide smoother design :)
-- Imtroduce product auto-complete for smoother consumption tracking
+- Introduce product auto-complete for smoother consumption tracking
 - Improve form validation - show invalid field and validation message
 - Shrink production package size (e.g. introduce webpack & gzip)
 - Add images for products

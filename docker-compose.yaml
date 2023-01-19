@@ -1,19 +1,10 @@
 version: "3.9"
 
 services:
-  nginx:
-    restart: always
-    build:
-      context: ./kalory-nginx/
-    ports:
-      - "80:80"
-    links:
-      - "kalory-frontend:frontend"
-      - "kalory-backend:backend"
   front:
     build: ./kalory-frontend/
     ports:
-      - "5000:5000"
+      - "3000:3000"
   api:
     restart: always
     build: ./kalory-backend/

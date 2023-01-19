@@ -11,7 +11,7 @@ import TagsPage from "./pages/TagsPage";
 import AuthRoute from "./components/routes/AuthRoute";
 
 function App() {
-  const { data, isError, isFetching } = useGetCurrentUserQuery();
+  const { isError, isFetching } = useGetCurrentUserQuery();
 
   if (isFetching) {
     return; // maybe show a global spinner?

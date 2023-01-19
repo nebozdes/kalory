@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCreateWeightCheckMutation } from "../../store";
 import Button from "../Button";
-import { notEmpty, notNull, positive, validateForm } from "./validation";
+import { notNull, positive, validateForm } from "./validation";
 
 import DatePicker from "../DatePicker";
 
